@@ -51,6 +51,9 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
+    @OneToOne(mappedBy = "user" , cascade=CascadeType.ALL , fetch = FetchType.LAZY)
+    private Chef chef;
+
     public enum Role{
         USER,
         CHEF,
