@@ -27,4 +27,13 @@ public class Chef {
     @Column(columnDefinition = "TEXT")
     private String bio;
     private String profileImageUrl;
+
+    @OneToMany(mappedBy = "chef" , cascade = CascadeType.ALL , orphanRemoval = true)
+    private Set<Recipe> recipies = new HashSet<>();
+
+    @OneToMany(mappedBy = "follower" , cascade = CascadeType.ALL , orphanRemoval = true)
+    private Set<ChefFollow> following = new HashSet<>();
+
+    @OneToMany(mappedBy = "following" , cascade = CascadeType.ALL , orphanRemoval = true)
+    private Set<ChefFollow> followers = new HashSet<>();
 }
