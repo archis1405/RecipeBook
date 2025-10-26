@@ -18,6 +18,7 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ChefFollow {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
