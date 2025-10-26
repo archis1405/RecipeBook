@@ -9,10 +9,10 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
-@Table(name = "recipes" , indexes = {
-        @Index(name = "idx_recipe_chef" , columnList = "chef_id"),
-        @Index(name = "idx_recipe_status" , columnList = "status"),
-        @Index(name = "idx_recipe_published" , columnList = "published_at")
+@Table(name = "recipes", indexes = {
+        @Index(name = "idx_recipe_chef", columnList = "chef_id"),
+        @Index(name = "idx_recipe_status", columnList = "status"),
+        @Index(name = "idx_recipe_published", columnList = "published_at")
 })
 @Getter
 @Setter
@@ -35,20 +35,28 @@ public class Recipe {
     private String summary;
 
     @ElementCollection
-    @CollectionTable(name="recipe_ingredients", joinColumns=@JoinColumn(name="recipe_id"))
-    @Column(name = "ingredient" , columnDefinition = "TEXT" , nullable = false)
+    @CollectionTable(name = "recipe_ingredients", joinColumns = @JoinColumn(name = "recipe_id"))
+    @Column(name = "ingredient", columnDefinition = "TEXT", nullable = false)
+    @Builder.Default
     private List<String> ingredients = new ArrayList<>();
 
     @ElementCollection
-    @CollectionTable(name="recipe_steps", joinColumns=@JoinColumn(name="recipe_id"))
-    @Column(name = "step" , columnDefinition = "TEXT" , nullable = false)
+    @CollectionTable(name = "recipe_steps", joinColumns = @JoinColumn(name = "recipe_id"))
+    @Column(name = "step", columnDefinition = "TEXT", nullable = false)
     @OrderColumn(name = "step_order")
+    @Builder.Default
     private List<String> steps = new ArrayList<>();
 
     @ElementCollection
-    @CollectionTable(name="recipe_labels", joinColumns=@JoinColumn(name="recipe_id"))
+    @CollectionTable(name = "recipe_labels", joinColumns = @JoinColumn(name = "recipe_id"))
     @Column(name = "label")
+    @Builder.Default
     private List<String> labels = new ArrayList<>();
+
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("displayOrder ASC")
+    @Builder.Default
+    private List<RecipeImage> recipeImages = new ArrayList<>();
 
     private Integer preparationTime;
     private Integer cookingTime;
@@ -58,18 +66,17 @@ public class Recipe {
     @Column(nullable = false)
     private RecipeStatus status = RecipeStatus.DRAFT;
 
-
     private LocalDateTime publishedAt;
 
     @CreationTimestamp
-    @Column(nullable = false , updatable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    public enum RecipeStatus{
+    public enum RecipeStatus {
         DRAFT,
         PROCESSING,
         PUBLISHED,
