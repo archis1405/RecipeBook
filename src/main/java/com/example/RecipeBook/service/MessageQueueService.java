@@ -2,10 +2,10 @@ package com.example.RecipeBook.service;
 
 import com.example.RecipeBook.dto.RecipeMessage;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 
 @Service
 @Slf4j
