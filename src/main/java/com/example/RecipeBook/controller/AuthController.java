@@ -1,5 +1,6 @@
 package com.example.RecipeBook.controller;
 
+import com.example.RecipeBook.dto.request.LoginRequest;
 import com.example.RecipeBook.dto.request.SignUpRequest;
 import com.example.RecipeBook.dto.response.AuthResponse;
 import com.example.RecipeBook.service.AuthService;
@@ -29,7 +30,7 @@ public class AuthController {
 
     @PostMapping("/login")
     @Operation(summary = "Login and get JWT token")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody SignUpRequest request){
-        return ResponseEntity.ok(authService.);
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request){
+        return ResponseEntity.ok(authService.login(request));
     }
 }

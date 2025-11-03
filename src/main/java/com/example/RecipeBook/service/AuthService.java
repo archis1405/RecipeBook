@@ -60,16 +60,16 @@ public class AuthService {
             user.setChef(chef);
         }
 
-        // Fixed: Use Spring Security's Authentication, not Tomcat's
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
 
-        // Fixed: Pass user and chef to buildAuthResponse
+
         return buildAuthResponse(authentication, user, chef);
     }
 
-    private AuthResponse login(LoginRequest request){
+    public AuthResponse login(LoginRequest request){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
