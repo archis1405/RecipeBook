@@ -41,7 +41,7 @@ public class RecipeService {
     private final MessageQueueService messageQueueService;
 
     @Transactional
-    public RecipeResponse createRecipe(Recipe request, String userEmail) {
+    public RecipeResponse createRecipe(RecipeRequest request, String userEmail) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User Not Found "));
 
