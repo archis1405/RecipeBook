@@ -1,9 +1,11 @@
 package com.example.RecipeBook.service;
 
+import com.example.RecipeBook.dto.request.LoginRequest;
 import com.example.RecipeBook.dto.request.SignUpRequest;
 import com.example.RecipeBook.dto.response.AuthResponse;
 import com.example.RecipeBook.entity.Chef;
 import com.example.RecipeBook.entity.User;
+import com.example.RecipeBook.exception.ResourceNotFoundException;
 import com.example.RecipeBook.repository.ChefRepository;
 import com.example.RecipeBook.repository.UserRepository;
 import com.example.RecipeBook.security.JwtTokenProvider;
@@ -65,6 +67,19 @@ public class AuthService {
 
         // Fixed: Pass user and chef to buildAuthResponse
         return buildAuthResponse(authentication, user, chef);
+    }
+
+    private AuthResponse login(LoginRequest request){
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+        );
+
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
+                () -> new ResourceNotFoundException("user Not Found"));
+
+        Chef chef = user.getChef();
+
+        return buildAuthResponse(authentication,user,chef);
     }
 
     private AuthResponse buildAuthResponse(Authentication authentication, User user, Chef chef) {
