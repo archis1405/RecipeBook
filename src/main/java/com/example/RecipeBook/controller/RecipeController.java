@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,6 +58,7 @@ public class RecipeController {
 
     @PostMapping
     @Operation(summary = "Create new recipe", security = @SecurityRequirement(name = "bearer-jwt"))
+    @PreAuthorize("hasAnyRole('CHEF', 'ADMIN')")
     public ResponseEntity<RecipeResponse> createRecipe(@Valid @RequestBody RecipeRequest request , Authentication authentication){
         String userEmail = authentication.getName();
         RecipeResponse response = recipeService.createRecipe(request, userEmail);
@@ -65,6 +67,7 @@ public class RecipeController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update recipe", security = @SecurityRequirement(name = "bearer-jwt"))
+    @PreAuthorize("hasRole('ADMIN') or @recipeSecurityService.isRecipeOwner(#id, authentication.name)")
     public ResponseEntity<RecipeResponse> updateRecipe(
             @PathVariable UUID id,
             @Valid @RequestBody RecipeRequest request,
@@ -75,6 +78,7 @@ public class RecipeController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete recipe", security = @SecurityRequirement(name = "bearer-jwt"))
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteRecipe(@PathVariable UUID id, Authentication authentication) {
         String userEmail = authentication.getName();
         recipeService.deleteRecipe(id, userEmail);
