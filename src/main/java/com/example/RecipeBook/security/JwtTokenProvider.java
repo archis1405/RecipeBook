@@ -31,7 +31,7 @@ public class JwtTokenProvider {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    private String generateToken(Authentication authentication){
+    public String generateToken(Authentication authentication){
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         return generateToken(userDetails.getUsername() , refreshExpiration);
     }
